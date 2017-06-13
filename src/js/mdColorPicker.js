@@ -679,12 +679,18 @@ angular.module('mdColorPicker', [])
 				///////////////////////////////////
 				$scope.isDark = function isDark( color ) {
 					if ( angular.isArray( color ) ) {
-						return tinycolor( {r: color[0], g: color[1], b: color[2] }).isDark();
+						return $scope.ufcIsDark(tinycolor( {r: color[0], g: color[1], b: color[2] }));
 					} else {
-						return tinycolor( color ).isDark();
+						return $scope.ufcIsDark(tinycolor( color ));
 					}
 
 				};
+				
+				// override tinycolor isDark()
+				$scope.ufcIsDark = function (color) {
+					return (color && color.getBrightness) ? color.getBrightness() < 138 : true;
+				};
+            
 				$scope.toRgbString = function (color) {
 					return $scope.mdColorAlphaChannel? color.toRgbString() : color.clone().setAlpha(1).toRgbString();
 				};
